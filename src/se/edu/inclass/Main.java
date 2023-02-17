@@ -19,10 +19,9 @@ public class Main {
         DataManager dm = new DataManager("./data/data.txt");
         ArrayList<Task> tasksData = dm.loadData();
 
-        printData(tasksData);
-        System.out.println();
-        System.out.println("Printing deadlines");
-        printDeadlines(tasksData);
+        //System.out.println();
+        //System.out.println("Printing deadlines");
+        //printDeadlines(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
         System.out.println();
@@ -30,7 +29,19 @@ public class Main {
 
         ArrayList<Task> filteredList = filterTaskListUsingStreams(tasksData, "11");
         printData(filteredList);
+        //System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
+        //printData(tasksData);
+        //printDataUsingStreams(tasksData);
+        printDeadlinesUsingStreams(tasksData);
+        System.out.println("Total number of deadlines using streams: " + countDeadlinesUsingStream(tasksData));
 
+    }
+
+    private static int countDeadlinesUsingStream(ArrayList<Task> tasks) {
+        int count = (int) tasks.stream()
+                .filter(t -> t instanceof Deadline)
+                .count();
+        return count;
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -41,6 +52,13 @@ public class Main {
             }
         }
         return count;
+    }
+
+    public static void printDataUsingStreams(ArrayList<Task> tasks) {
+        System.out.println("Printing using streams");
+        System.out.println(" ");
+        tasks.stream()      //convert to stream
+                .forEach(System.out::println);
     }
 
     public static void printData(ArrayList<Task> tasksData) {
@@ -56,7 +74,6 @@ public class Main {
             }
         }
     }
-
     public static void printDeadlinesUsingStreams(ArrayList<Task> tasks) {
         tasks.stream().filter(t -> t instanceof Deadline).sorted((a, b) -> a.getDescription().compareToIgnoreCase(b.getDescription())).forEach(System.out::println);
     }
